@@ -47,6 +47,14 @@ public class BatterGenerator {
     	else return 1;
     	//throw new IllegalArgumentException(position + " is not a position");
     }
+
+    /////////////////// HERE /////////////////
+    private static int calcSpeed(int plateAppearances, int stolenBases, int caughtStealing, int triples) {
+    	double sbPercentage = stolenBases / (double)(stolenBases + caughtStealing); // divide by zero???
+    	double sbFrequency = stolenBases / (double)(plateAppearances);
+    	return (int)(10 * ((sbFrequency + sbPercentage) / 2) + 10);
+
+    }
     private static int calcNumberResult(int plateAppearances, int resultType) {
     	return (resultType * 60) / plateAppearances;
     }
@@ -99,6 +107,7 @@ public class BatterGenerator {
 			int singles = hits - (doubls + triples + homers);
 			stats[POSITION] = parsePosition(position);
 			stats[FIELDING] = 1; /// temporary place holder
+			stats[SPEED] = calcSpeed(plateAppearances, stolenBases, caughtStealing, triples);
 			stats[ONBASE] = calcOBP(aveOBP, obp);
 			stats[OSO] = 1;
 			stats[OGB] = 1; /// temporary place holder
@@ -107,8 +116,9 @@ public class BatterGenerator {
 			stats[HOMERUN] = HIGHROLL + 1 - calcNumberResult(plateAppearances, homers);
 			stats[TRIPLE] = stats[HOMERUN] - calcNumberResult(plateAppearances, triples);
 			stats[DOUBL] = stats[TRIPLE] - calcNumberResult(plateAppearances, doubls);
-			stats[SINGLE] = stats[DOUBL] - calcNumberResult(plateAppearances, singles);
 			stats[WALK] = calcGetsOnWith(aveOBP, obp);
+			stats[SINGLE] = (stats[WALK] + calcNumberResult(plateAppearances, walks) + stats[DOUBL] - calcNumberResult(plateAppearances, doubls)) / 2;
+			
 
 			stats[SINGLEP] = stats[DOUBL]; /// temporary placeholder
 
