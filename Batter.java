@@ -23,6 +23,8 @@ public class Batter {
     private final static int TRIPLE = 11;
     private final static int HOMERUN = 12;
 
+    private final static int HIGHROLL = 20;
+
     
     private String name;
     private int[] stats;
@@ -33,6 +35,8 @@ public class Batter {
         stats = new int[HOMERUN + 1];
         for (int i=0; i < stats.length; i++)
             stats[i] = StdIn.readInt();
+        if (stats[OSO] != 1)
+            throw new IllegalArgumentException("Strikeouts must start at 1!");
     }
 
     /* Creates a new batter with name "first last" and stats as 
@@ -61,6 +65,9 @@ public class Batter {
         stats = new int[HOMERUN + 1];
         for (int i=0; i < stats.length; i++)
             stats[i] = s[i];
+        if (stats[OSO] != 1)
+            throw new IllegalArgumentException("Strikeouts must start at 1!");
+
     }
         
     
@@ -69,22 +76,69 @@ public class Batter {
                 stats[FIELDING]);
         StdOut.println("On Base " + stats[ONBASE] + ", Speed " + 
                 stats[SPEED]);
-        StdOut.println("Strikeout: " + stats[OSO] + "-" + 
-                (stats[OGB]-1));
-        StdOut.println("Groundout: " + stats[OGB] + "-" + 
-                (stats[OFB]-1));
-        StdOut.println("Flyout: " + stats[OFB] + "-" + (stats[WALK]-1));
-        StdOut.println("Walk: " + stats[WALK] + "-" + (stats[SINGLE]-1));
-        StdOut.println("Single: " + stats[SINGLE] + "-" + 
-                (stats[SINGLEP]-1));
-        StdOut.println("Single+: " + stats[SINGLEP] + "-" + 
-                (stats[DOUBL]-1));
-        StdOut.println("Double: " + stats[DOUBL] + "-" + 
-                (stats[TRIPLE]-1));
-        StdOut.println("Triple: " + stats[TRIPLE] + "-" + 
-                (stats[HOMERUN]-1));
-        StdOut.println("HomeRun: " + stats[HOMERUN] + "-20");
-        
+
+        StdOut.print("Strikeout:\t");
+        if (stats[OSO] == stats[OGB])
+            StdOut.println(" -");
+        else if (stats[OSO] == (stats[OGB]-1))
+            StdOut.println(" "+stats[OSO]);
+        else StdOut.println(stats[OSO] + "-" + (stats[OGB]-1));
+
+        StdOut.print("Groundout:\t");
+        if (stats[OGB] == stats[OFB])
+            StdOut.println(" -");
+        else if (stats[OGB] == (stats[OFB]-1))
+            StdOut.println(" "+stats[OGB]);
+        else StdOut.println(stats[OGB] + "-" + (stats[OFB]-1));
+
+        StdOut.print("Flyout:\t\t");
+        if (stats[OFB] == stats[WALK])
+            StdOut.println(" -");
+        else if (stats[OFB] == (stats[WALK]-1))
+            StdOut.println(" "+stats[OFB]);
+        else StdOut.println(stats[OFB] + "-" + (stats[WALK]-1));
+
+        StdOut.print("Walk:\t\t");
+        if (stats[WALK] == stats[SINGLE])
+            StdOut.println(" -");
+        else if (stats[WALK] == (stats[SINGLE]-1))
+            StdOut.println(" "+stats[WALK]);
+        else StdOut.println(stats[WALK] + "-" + (stats[SINGLE]-1));
+
+        StdOut.print("Single:\t\t");
+        if (stats[SINGLE] == stats[SINGLEP])
+            StdOut.println(" -");
+        else if (stats[SINGLE] == (stats[SINGLEP]-1))
+            StdOut.println(" "+stats[SINGLE]);
+        else StdOut.println(stats[SINGLE] + "-" + (stats[SINGLEP]-1));
+
+        StdOut.print("Single+:\t");
+        if (stats[SINGLEP] == stats[DOUBL])
+            StdOut.println(" -");
+        else if (stats[SINGLEP] == (stats[DOUBL]-1))
+            StdOut.println(" "+stats[SINGLEP]);
+        else StdOut.println(stats[SINGLEP] + "-" + (stats[DOUBL]-1));
+
+        StdOut.print("Double:\t\t");
+        if (stats[DOUBL] == stats[TRIPLE])
+            StdOut.println(" -");
+        else if (stats[DOUBL] == (stats[TRIPLE]-1))
+            StdOut.println(" "+stats[DOUBL]);
+        else StdOut.println(stats[DOUBL] + "-" + (stats[TRIPLE]-1));
+
+        StdOut.print("Triple:\t\t");
+        if (stats[TRIPLE] == stats[HOMERUN])
+            StdOut.println(" -");
+        else if (stats[TRIPLE] == (stats[HOMERUN]-1))
+            StdOut.println(" "+stats[TRIPLE]);
+        else StdOut.println(stats[TRIPLE] + "-" + (stats[HOMERUN]-1));
+
+        StdOut.print("Homer:\t\t");
+        if (stats[HOMERUN] > HIGHROLL)
+            StdOut.println(" -");
+        else if (stats[HOMERUN] == HIGHROLL)
+            StdOut.println(" "+stats[HOMERUN]);
+        else StdOut.println(stats[HOMERUN] + "-" + HIGHROLL);
     }
     
     public String getName() {
