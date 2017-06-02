@@ -1,6 +1,6 @@
 /***********************************************************************
-  *  Name:    Gil Melnick
-  *
+  *  Batter.java
+  *  Gil Melnick
   *********************************************************************/
 
 import edu.princeton.cs.algs4.StdRandom;
@@ -145,16 +145,16 @@ public class Batter {
         return name;   
     }
     public int onBase() {
-        return stats[0];
+        return stats[ONBASE];
     }
     public int position() {
-        return stats[1];
+        return stats[POSITION];
     }
     public int fielding() {
-        return stats[2];
+        return stats[FIELDING];
     }
     public int speed() {
-        return stats[3];
+        return stats[SPEED];
     }
     /*
     public BIP bat() {
@@ -192,6 +192,8 @@ public class Batter {
     }
     
     */
+
+    /* Test creation of a batter and the format of .show() */
     public static void main(String[] args) {
         Batter b = new Batter();
         b.show();
