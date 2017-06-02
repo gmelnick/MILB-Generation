@@ -34,9 +34,26 @@ public class BatterGenerator {
        http://www.baseball-reference.com/leagues/MLB/bat.shtml */
     private final static int AVEOBP = 345; // year 2000
 
+    private static int parsePosition(String position) {
+    	if (position.equals("DH")) return 1;
+    	if (position.equals("C")) return 2;
+    	if (position.equals("1B")) return 3;
+    	if (position.equals("2B")) return 4;
+    	if (position.equals("3B")) return 5;
+    	if (position.equals("SS")) return 6;
+    	if (position.equals("LF")) return 7;
+    	if (position.equals("CF")) return 8;
+    	if (position.equals("RF")) return 9;
+    	else return 1;
+    	//throw new IllegalArgumentException(position + " is not a position");
+    }
+    private static int calcNumberResult(int plateAppearances, int resultType) {
+    	return (resultType * 60) / plateAppearances;
+    }
+
     private static int calcGetsOnWith(double aveOBP, double obp) {
     	double rawOBP = (20 * Math.sqrt(obp/aveOBP) - 12.2);
-    	double remainder = 10 * (rawOPB - (int)rawOPB);
+    	double remainder = 10 * (rawOBP - (int)rawOBP);
     	if (remainder < 2) return 6;
     	if (remainder < 5) return 5;
     	if (remainder < 8) return 4;
@@ -79,10 +96,25 @@ public class BatterGenerator {
 
 			int plateAppearances = atBats + walks; // not really true...
 
+			int singles = hits - (doubls + triples + homers);
+			stats[POSITION] = parsePosition(position);
+			stats[FIELDING] = 1; /// temporary place holder
 			stats[ONBASE] = calcOBP(aveOBP, obp);
 			stats[OSO] = 1;
+			stats[OGB] = 1; /// temporary place holder
+			stats[OFB] = 1; /// temporary place holder
 
+			stats[HOMERUN] = HIGHROLL + 1 - calcNumberResult(plateAppearances, homers);
+			stats[TRIPLE] = stats[HOMERUN] - calcNumberResult(plateAppearances, triples);
+			stats[DOUBL] = stats[TRIPLE] - calcNumberResult(plateAppearances, doubls);
+			stats[SINGLE] = stats[DOUBL] - calcNumberResult(plateAppearances, singles);
 			stats[WALK] = calcGetsOnWith(aveOBP, obp);
+
+			stats[SINGLEP] = stats[DOUBL]; /// temporary placeholder
+
+			Batter batter = new Batter(firstInitial, lastname, stats);
+			batter.show();
+			StdOut.println();
 
 
 
