@@ -47,8 +47,16 @@ public class BatterGenerator {
     	else return 1;
     	//throw new IllegalArgumentException(position + " is not a position");
     }
-    private static int calcNumberResult(int plateAppearances, int resultType) {
-    	return (resultType * 60) / plateAppearances;
+
+    private static int round(double value) {
+    	int base = (int)value;
+    	if (value - base < 0.5) return base;
+    	return base + 1;
+    }
+    private static double calcNumberResult(int outOfNumber, int resultType) {
+    	if (outOfNumber < 0) throw new IllegalArgumentException();
+    	if (outOfNumber == 0) return 0;
+    	return resultType / (double)outOfNumber;
     }
 
     private static int calcGetsOnWith(double aveOBP, double obp) {
@@ -60,8 +68,10 @@ public class BatterGenerator {
 		return 3;
     }
 
-    private static int calcOBP(double aveOBP, double obp) {
-    	return (int)(20 * Math.sqrt(obp/aveOBP) - 12.2);
+    private static int calcOB(double aveOBP, double obp) {
+    	int value = (int)(20 * Math.sqrt(obp/aveOBP) - 12.2);
+    	if (value < 3) value = 3;
+    	return value;
     }
 
 	public static void main(String args[]) {
@@ -94,21 +104,31 @@ public class BatterGenerator {
 			StdIn.readDouble(); // slugging percentage discarded
 			StdIn.readDouble(); // OPS discarded
 
-			int plateAppearances = atBats + walks; // not really true...
+			int plateAppearances = atBats;// + walks; // not really true...
 
 			int singles = hits - (doubls + triples + homers);
 			stats[POSITION] = parsePosition(position);
 			stats[FIELDING] = 1; /// temporary place holder
-			stats[ONBASE] = calcOBP(aveOBP, obp);
+			stats[ONBASE] = calcOB(aveOBP, obp);
 			stats[OSO] = 1;
 			stats[OGB] = 1; /// temporary place holder
 			stats[OFB] = 1; /// temporary place holder
 
-			stats[HOMERUN] = HIGHROLL + 1 - calcNumberResult(plateAppearances, homers);
-			stats[TRIPLE] = stats[HOMERUN] - calcNumberResult(plateAppearances, triples);
-			stats[DOUBL] = stats[TRIPLE] - calcNumberResult(plateAppearances, doubls);
-			stats[SINGLE] = stats[DOUBL] - calcNumberResult(plateAppearances, singles);
+			int reachedBase = hits + walks;
+
+
 			stats[WALK] = calcGetsOnWith(aveOBP, obp);
+
+			int reachRange = HIGHROLL + 1 - stats[WALK];
+			//stats[SINGLE] = stats[WALK] + round(reachRange * calcNumberResult(reachedBase, walks));
+
+			int hitRange = HIGHROLL + 1 - stats[SINGLE];
+
+			stats[HOMERUN] = HIGHROLL + 1 - round(reachRange * calcNumberResult(reachedBase, homers));
+			stats[TRIPLE] = stats[HOMERUN] - round(reachRange * calcNumberResult(reachedBase, triples));
+			stats[DOUBL] = stats[TRIPLE] - round(reachRange * calcNumberResult(reachedBase, doubls));
+			stats[SINGLE] = stats[DOUBL] - round(reachRange * calcNumberResult(reachedBase, singles));
+			
 
 			stats[SINGLEP] = stats[DOUBL]; /// temporary placeholder
 
