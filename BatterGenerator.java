@@ -123,13 +123,22 @@ public class BatterGenerator {
 			int reachRange = HIGHROLL + 1 - stats[WALK];
 			//stats[SINGLE] = stats[WALK] + round(reachRange * calcNumberResult(reachedBase, walks));
 
-			int hitRange = HIGHROLL + 1 - stats[SINGLE];
-
+/*
 			stats[HOMERUN] = HIGHROLL + 1 - round(reachRange * calcNumberResult(reachedBase, homers));
 			stats[TRIPLE] = stats[HOMERUN] - round(reachRange * calcNumberResult(reachedBase, triples));
 			stats[DOUBL] = stats[TRIPLE] - round(reachRange * calcNumberResult(reachedBase, doubls));
 			stats[SINGLE] = stats[DOUBL] - round(reachRange * calcNumberResult(reachedBase, singles));
+*/
 			
+			double temp = HIGHROLL + 1 - reachRange * calcNumberResult(reachedBase, homers);
+			stats[HOMERUN] = round(temp);
+			temp = temp - reachRange * calcNumberResult(reachedBase, triples);
+			stats[TRIPLE] = round(temp);
+			temp = temp - reachRange * calcNumberResult(reachedBase, doubls);
+			stats[DOUBL] = round(temp);
+			temp = temp - reachRange * calcNumberResult(reachedBase, singles);
+			stats[SINGLE] = round(temp);
+
 
 			stats[SINGLEP] = stats[DOUBL]; /// temporary placeholder
 
