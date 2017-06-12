@@ -34,6 +34,7 @@ public class BatterGenerator {
        http://www.baseball-reference.com/leagues/MLB/bat.shtml */
     private final static int AVEOBP = 345; // year 2000
 
+    
     private static int parsePosition(String position) {
     	if (position.equals("DH")) return 1;
     	if (position.equals("C")) return 2;
@@ -51,7 +52,7 @@ public class BatterGenerator {
     private static int round(double value) {
     	int base = (int)value;
     	if (value - base < 0.5) return base;
-    	return base + 1;
+    	else return base + 1;
     }
     private static double calcNumberResult(int outOfNumber, int resultType) {
     	if (outOfNumber < 0) throw new IllegalArgumentException();
